@@ -1,1 +1,5 @@
-/* styles go here */
+.color-entry {
+    border-radius: 5px;
+    padding: .5em;
+    width: 5.5em;
+}

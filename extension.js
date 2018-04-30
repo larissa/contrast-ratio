@@ -20,12 +20,48 @@ Copyright (c) 2018 Larissa Reis <reiss.larissa@gmail.com>
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const Lang = imports.lang;
+const Clutter = imports.gi.Clutter;
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
 
 let contrast_ratio_panel;
+
+
+const ColorInput = new Lang.Class({
+    Name: 'ColorInput',
+    Extends: PopupMenu.PopupBaseMenuItem,
+    _type: null,
+    _color: null,
+    _colorEntry: null,
+    _colorPreview: null,
+
+    _init: function(type, color) {
+        this.parent({ reactive: false });
+
+        this._type = type;
+        this._color = color;
+
+        this._colorPreview = new Clutter.Actor();
+        this._colorPreview.set_size(35, 35);
+        this._colorPreview.set_background_color(new Clutter.Color({
+            red : 100,
+            blue : 100,
+            green : 100,
+            alpha : 255
+        }));
+        this.actor.add(this._colorPreview);
+
+        this.colorEntry = new St.Entry({ name: type, text: color, can_focus: true, style_class: 'color-entry' });
+        this.colorEntry.clutter_text.connect('activate', Lang.bind(this, this._onActivate));
+        this.actor.add(this.colorEntry);
+    },
+
+    _onActivate: function() {
+        global.log(this.colorEntry.get_text());
+    },
+});
 
 const ContrastRatioLabel = new Lang.Class({
     Name: 'ContrastRatioLabel',
@@ -82,6 +118,16 @@ const ContrastRatioPanel = new Lang.Class({
            style_class: 'system-status-icon'
        });
        this.actor.add_actor(icon);
+
+       let background_color_label = new PopupMenu.PopupMenuItem('Background color', { reactive: false });
+       this.menu.addMenuItem(background_color_label);
+       let background_color_input = new ColorInput('background', this._backgroundColor);
+       this.menu.addMenuItem(background_color_input);
+
+       let text_color_label = new PopupMenu.PopupMenuItem('Text color', { reactive: false });
+       this.menu.addMenuItem(text_color_label);
+       let text_color_input = new ColorInput('text', this._textColor);
+       this.menu.addMenuItem(text_color_input);
 
        let contrast_ratio_label = new ContrastRatioLabel(5);
        this.menu.addMenuItem(contrast_ratio_label);
