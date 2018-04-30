@@ -1,1 +1,6 @@
-{"name": "Contrast Ratio", "description": "Capture colors and calculate contrast ratio for readability", "uuid": "contrast-ratio@larissareis.org", "shell-version": ["3.26.2"]}
+{
+  "name": "Contrast Ratio",
+  "description": "Capture colors and calculate contrast ratio for readability",
+  "uuid": "contrast-ratio@larissareis.org",
+  "shell-version": ["3.26.2"]
+}
