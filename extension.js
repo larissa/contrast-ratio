@@ -27,10 +27,52 @@ const PopupMenu = imports.ui.popupMenu;
 
 let contrast_ratio_panel;
 
+const ContrastRatioLabel = new Lang.Class({
+    Name: 'ContrastRatioLabel',
+    Extends: PopupMenu.PopupBaseMenuItem,
+    _ratio: null,
+
+    _init: function(ratio) {
+        this.parent({ reactive: false });
+
+        this._ratio = ratio;
+        let ratio_label = new St.Label({ text: ratio.toString() })
+        let score_label = new St.Label({ text: this._scoreFromRatio(ratio) })
+
+        this.actor.add(score_label);
+        this.actor.add(ratio_label, { align: St.Align.END });
+    },
+
+    _scoreFromRatio: function(ratio) {
+        let levels = {
+            "Fail": {
+                lower: 0,
+                upper: 3
+            },
+            "AA-Large": {
+                lower: 3,
+                upper: 4.5
+            },
+            "AA": {
+                lower: 4.5,
+                upper: 7
+            },
+            "AAA": {
+                lower: 7,
+                upper: 22
+            }
+        }
+        return Object.keys(levels).find(function(key) {
+            return ratio >= levels[key].lower && ratio < levels[key].upper;
+        });
+    },
+});
+
 const ContrastRatioPanel = new Lang.Class({
     Name: 'ContrastRatioPanel',
     Extends: PanelMenu.Button,
-    text: null,
+    _backgroundColor: '#FFFFFF',
+    _textColor: '#000000',
 
     _init: function() {
        this.parent(0.0, "Contrast Ratio", false);
@@ -40,6 +82,12 @@ const ContrastRatioPanel = new Lang.Class({
            style_class: 'system-status-icon'
        });
        this.actor.add_actor(icon);
+
+       let contrast_ratio_label = new ContrastRatioLabel(5);
+       this.menu.addMenuItem(contrast_ratio_label);
+
+       let separator = new PopupMenu.PopupSeparatorMenuItem();
+       this.menu.addMenuItem(separator);
 
        let swap_colors_button = new PopupMenu.PopupMenuItem('Swap colors');
        swap_colors_button.connect('activate', Lang.bind(this, this._onSwapColors));
