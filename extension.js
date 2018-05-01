@@ -25,9 +25,13 @@ const Clutter = imports.gi.Clutter;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+
+const hexToRgba = Me.imports.vendor.hexToRgba.hexToRgba;
+
 
 let contrast_ratio_panel;
-
 
 const ColorInput = new Lang.Class({
     Name: 'ColorInput',
@@ -45,22 +49,32 @@ const ColorInput = new Lang.Class({
 
         this._colorPreview = new Clutter.Actor();
         this._colorPreview.set_size(35, 35);
-        this._colorPreview.set_background_color(new Clutter.Color({
-            red : 100,
-            blue : 100,
-            green : 100,
-            alpha : 255
-        }));
+        this._updatePreviewColor();
         this.actor.add(this._colorPreview);
 
-        this.colorEntry = new St.Entry({ name: type, text: color, can_focus: true, style_class: 'color-entry' });
-        this.colorEntry.clutter_text.connect('activate', Lang.bind(this, this._onActivate));
-        this.actor.add(this.colorEntry);
+        this._colorEntry = new St.Entry({ name: type, text: color, can_focus: true, style_class: 'color-entry' });
+        this._colorEntry.clutter_text.connect('activate', Lang.bind(this, this._onActivate));
+        this.actor.add(this._colorEntry);
     },
 
     _onActivate: function() {
-        global.log(this.colorEntry.get_text());
+        global.log(this._colorEntry.get_text());
+        this._color = this._colorEntry.get_text();
+        this._updatePreviewColor();
     },
+
+    _updatePreviewColor: function() {
+        global.log(this._color);
+        let rgba_color = hexToRgba(this._color);
+        global.log(rgba_color);
+
+        this._colorPreview.set_background_color(new Clutter.Color({
+            red : rgba_color[0],
+            blue : rgba_color[1],
+            green : rgba_color[2],
+            alpha : rgba_color[3]
+        }));
+    }
 });
 
 const ContrastRatioLabel = new Lang.Class({
