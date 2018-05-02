@@ -28,8 +28,6 @@ const PopupMenu = imports.ui.popupMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const hexToRgba = Me.imports.vendor.hexToRgba.hexToRgba;
-
 
 let contrast_ratio_panel;
 
@@ -64,16 +62,11 @@ const ColorInput = new Lang.Class({
     },
 
     _updatePreviewColor: function() {
-        global.log(this._color);
-        let rgba_color = hexToRgba(this._color);
-        global.log(rgba_color);
-
-        this._colorPreview.set_background_color(new Clutter.Color({
-            red : rgba_color[0],
-            blue : rgba_color[1],
-            green : rgba_color[2],
-            alpha : rgba_color[3]
-        }));
+        let res, rgba_color
+        [res, rgba_color] = Clutter.Color.from_string(this._color);
+        if (res) {
+          this._colorPreview.set_background_color(rgba_color);
+        }
     }
 });
 
