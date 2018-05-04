@@ -17,11 +17,14 @@ Copyright (c) 2018 Larissa Reis <reiss.larissa@gmail.com>
 */
 
 
-const St = imports.gi.St;
-const Main = imports.ui.main;
-const Lang = imports.lang;
 const Clutter = imports.gi.Clutter;
+const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
+const Lang = imports.lang;
+const Mainloop = imports.mainloop
+const St = imports.gi.St;
 
+const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 
@@ -38,16 +41,20 @@ const ColorInput = new Lang.Class({
     _color: null,
     _colorEntry: null,
     _colorPreview: null,
+    _output_reader: null,
 
-    _init: function(type, color) {
+    _init: function(type, color, parentMenu) {
         this.parent({ reactive: false });
 
         this._type = type;
         this._color = color;
+        this._parent = parentMenu;
 
         this._colorPreview = new Clutter.Actor();
+        this._colorPreview.set_reactive(true);
         this._colorPreview.set_size(35, 35);
         this._updatePreviewColor();
+        this._colorPreview.connect('button-release-event', Lang.bind(this, this._onClickPreview));
         this.actor.add(this._colorPreview);
 
         this._colorEntry = new St.Entry({ name: type, text: color, can_focus: true, style_class: 'color-entry' });
@@ -56,18 +63,39 @@ const ColorInput = new Lang.Class({
     },
 
     _onActivate: function() {
-        global.log(this._colorEntry.get_text());
         this._color = this._colorEntry.get_text();
         this._updatePreviewColor();
+    },
+
+    _onClickPreview: function() {
+        this._getTopMenu().toggle();
+        Mainloop.timeout_add(200, Lang.bind(this, function() {
+            let [res, pid, in_fd, out_fd, err_fd] = GLib.spawn_async_with_pipes(null, ['/usr/bin/grabc'], null, 0, null);
+            this._output_reader = new Gio.DataInputStream({
+                base_stream: new Gio.UnixInputStream({fd: out_fd})
+            });
+            this._output_reader.read_upto_async("", 0, 0, null, Lang.bind(this, this._getColorCallBack));
+        }));
     },
 
     _updatePreviewColor: function() {
         let res, rgba_color
         [res, rgba_color] = Clutter.Color.from_string(this._color);
         if (res) {
-          this._colorPreview.set_background_color(rgba_color);
+            this._colorPreview.set_background_color(rgba_color);
         }
+    },
+
+    _getColorCallBack: function(source_object, res) {
+        let [color, length] = this._output_reader.read_upto_finish(res);
+        this._color = color;
+        this._colorEntry.set_text(color);
+        this._updatePreviewColor();
+        Mainloop.timeout_add(200, Lang.bind(this, function() {
+            this._getTopMenu().toggle();
+        }));
     }
+
 });
 
 const ContrastRatioLabel = new Lang.Class({
@@ -118,38 +146,38 @@ const ContrastRatioPanel = new Lang.Class({
     _textColor: '#000000',
 
     _init: function() {
-       this.parent(0.0, "Contrast Ratio", false);
+        this.parent(0.0, "Contrast Ratio", false);
 
-       let icon = new St.Icon({
-           icon_name: 'color-select-symbolic',
-           style_class: 'system-status-icon'
-       });
-       this.actor.add_actor(icon);
+        let icon = new St.Icon({
+            icon_name: 'color-select-symbolic',
+            style_class: 'system-status-icon'
+        });
+        this.actor.add_actor(icon);
 
-       let background_color_label = new PopupMenu.PopupMenuItem('Background color', { reactive: false });
-       this.menu.addMenuItem(background_color_label);
-       let background_color_input = new ColorInput('background', this._backgroundColor);
-       this.menu.addMenuItem(background_color_input);
+        let background_color_label = new PopupMenu.PopupMenuItem('Background color', { reactive: false });
+        this.menu.addMenuItem(background_color_label);
+        let background_color_input = new ColorInput('background', this._backgroundColor, this);
+        this.menu.addMenuItem(background_color_input);
 
-       let text_color_label = new PopupMenu.PopupMenuItem('Text color', { reactive: false });
-       this.menu.addMenuItem(text_color_label);
-       let text_color_input = new ColorInput('text', this._textColor);
-       this.menu.addMenuItem(text_color_input);
+        let text_color_label = new PopupMenu.PopupMenuItem('Text color', { reactive: false });
+        this.menu.addMenuItem(text_color_label);
+        let text_color_input = new ColorInput('text', this._textColor, this);
+        this.menu.addMenuItem(text_color_input);
 
-       let contrast_ratio_label = new ContrastRatioLabel(5);
-       this.menu.addMenuItem(contrast_ratio_label);
+        let contrast_ratio_label = new ContrastRatioLabel(5);
+        this.menu.addMenuItem(contrast_ratio_label);
 
-       let separator = new PopupMenu.PopupSeparatorMenuItem();
-       this.menu.addMenuItem(separator);
+        let separator = new PopupMenu.PopupSeparatorMenuItem();
+        this.menu.addMenuItem(separator);
 
-       let swap_colors_button = new PopupMenu.PopupMenuItem('Swap colors');
-       swap_colors_button.connect('activate', Lang.bind(this, this._onSwapColors));
-       this.menu.addMenuItem(swap_colors_button);
+        let swap_colors_button = new PopupMenu.PopupMenuItem('Swap colors');
+        swap_colors_button.connect('activate', Lang.bind(this, this._onSwapColors));
+        this.menu.addMenuItem(swap_colors_button);
     },
 
     _onSwapColors: function() {
         global.log("Swapping colors");
-    }
+    },
 });
 
 function init() {
@@ -162,9 +190,9 @@ function enable() {
 
 function disable() {
     if (contrast_ratio_panel) {
-      Main.panel._rightBox.remove_actor(contrast_ratio_panel.container);
-      Main.panel.menuManager.removeMenu(contrast_ratio_panel.menu);
-      contrast_ratio_panel.destroy();
-      contrast_ratio_panel = null;
+        Main.panel._rightBox.remove_actor(contrast_ratio_panel.container);
+        Main.panel.menuManager.removeMenu(contrast_ratio_panel.menu);
+        contrast_ratio_panel.destroy();
+        contrast_ratio_panel = null;
     };
 }
