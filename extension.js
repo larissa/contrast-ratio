@@ -68,14 +68,21 @@ const ColorInput = new Lang.Class({
     },
 
     _onClickPreview: function() {
-        this._getTopMenu().toggle();
-        Mainloop.timeout_add(200, Lang.bind(this, function() {
-            let [res, pid, in_fd, out_fd, err_fd] = GLib.spawn_async_with_pipes(null, ['/usr/bin/grabc'], null, 0, null);
-            this._output_reader = new Gio.DataInputStream({
-                base_stream: new Gio.UnixInputStream({fd: out_fd})
-            });
-            this._output_reader.read_upto_async("", 0, 0, null, Lang.bind(this, this._getColorCallBack));
-        }));
+        // We only pick a color if we have an external tool available
+        let picker_path = GLib.spawn_command_line_sync('which grabc')[1].
+            toString().
+            replace('\n', '');
+
+        if (picker_path !== '') {
+            this._getTopMenu().toggle();
+            Mainloop.timeout_add(200, Lang.bind(this, function() {
+                let [res, pid, in_fd, out_fd, err_fd] = GLib.spawn_async_with_pipes(null, [picker_path], null, 0, null);
+                this._output_reader = new Gio.DataInputStream({
+                    base_stream: new Gio.UnixInputStream({fd: out_fd})
+                });
+                this._output_reader.read_upto_async("", 0, 0, null, Lang.bind(this, this._getColorCallBack));
+            }));
+        }
     },
 
     _updatePreviewColor: function() {
