@@ -50,9 +50,7 @@ const ColorInput = new Lang.Class({
         this._color = color;
         this._parent = parentMenu;
 
-        this._colorPreview = new Clutter.Actor();
-        this._colorPreview.set_reactive(true);
-        this._colorPreview.set_size(35, 35);
+        this._colorPreview = new St.Widget({ reactive: true, style_class: 'color-preview' });
         this._updatePreviewColor();
         this._colorPreview.connect('button-release-event', Lang.bind(this, this._onClickPreview));
         this.actor.add(this._colorPreview);
@@ -63,7 +61,7 @@ const ColorInput = new Lang.Class({
     },
 
     _onActivate: function() {
-        this._color = this._colorEntry.get_text();
+        this._set_color(this._colorEntry.get_text());
         this._updatePreviewColor();
     },
 
@@ -82,25 +80,30 @@ const ColorInput = new Lang.Class({
                 });
                 this._output_reader.read_upto_async("", 0, 0, null, Lang.bind(this, this._getColorCallBack));
             }));
-        }
+        };
     },
 
     _updatePreviewColor: function() {
-        let res, rgba_color
-        [res, rgba_color] = Clutter.Color.from_string(this._color);
-        if (res) {
-            this._colorPreview.set_background_color(rgba_color);
-        }
+        this._colorPreview.set_style('background-color: ' + this._color + ';');
     },
 
     _getColorCallBack: function(source_object, res) {
         let [color, length] = this._output_reader.read_upto_finish(res);
-        this._color = color;
-        this._colorEntry.set_text(color);
+        this._set_color(color);
         this._updatePreviewColor();
         Mainloop.timeout_add(200, Lang.bind(this, function() {
             this._getTopMenu().toggle();
         }));
+    },
+
+    _set_color: function(color) {
+        let res, rgba_color;
+        [res, rgba_color] = Clutter.Color.from_string(color);
+        if (res) {
+            // Remove alpha hex and normalize color to upper case
+            this._color = rgba_color.to_string().substr(0, 7).toUpperCase();
+            this._colorEntry.set_text(this._color);
+        };
     }
 
 });
@@ -139,7 +142,7 @@ const ContrastRatioLabel = new Lang.Class({
                 lower: 7,
                 upper: 22
             }
-        }
+        };
         return Object.keys(levels).find(function(key) {
             return ratio >= levels[key].lower && ratio < levels[key].upper;
         });

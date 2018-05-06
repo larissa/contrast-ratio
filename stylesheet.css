@@ -3,3 +3,10 @@
     padding: .5em;
     width: 5.5em;
 }
+
+.color-preview {
+    border-radius: 5px;
+    border: 1px solid #282C2C;
+    width: 35px;
+    height: 35px;
+}
