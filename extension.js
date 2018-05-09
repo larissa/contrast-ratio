@@ -37,8 +37,8 @@ let contrast_ratio_panel;
 const ColorInput = new Lang.Class({
     Name: 'ColorInput',
     Extends: PopupMenu.PopupBaseMenuItem,
+    color: null,
     _type: null,
-    _color: null,
     _colorEntry: null,
     _colorPreview: null,
     _output_reader: null,
@@ -46,8 +46,8 @@ const ColorInput = new Lang.Class({
     _init: function(type, color, parentMenu) {
         this.parent({ reactive: false });
 
+        this.color = color;
         this._type = type;
-        this._color = color;
         this._parent = parentMenu;
 
         this._colorPreview = new St.Widget({ reactive: true, style_class: 'color-preview' });
@@ -84,7 +84,7 @@ const ColorInput = new Lang.Class({
     },
 
     _updatePreviewColor: function() {
-        this._colorPreview.set_style('background-color: ' + this._color + ';');
+        this._colorPreview.set_style('background-color: ' + this.color + ';');
     },
 
     _getColorCallBack: function(source_object, res) {
@@ -101,9 +101,14 @@ const ColorInput = new Lang.Class({
         [res, rgba_color] = Clutter.Color.from_string(color);
         if (res) {
             // Remove alpha hex and normalize color to upper case
-            this._color = rgba_color.to_string().substr(0, 7).toUpperCase();
-            this._colorEntry.set_text(this._color);
+            this.color = rgba_color.to_string().substr(0, 7).toUpperCase();
+            this._colorEntry.set_text(this.color);
         };
+    },
+
+    update: function(color) {
+        this._set_color(color);
+        this._updatePreviewColor();
     }
 
 });
@@ -152,8 +157,8 @@ const ContrastRatioLabel = new Lang.Class({
 const ContrastRatioPanel = new Lang.Class({
     Name: 'ContrastRatioPanel',
     Extends: PanelMenu.Button,
-    _backgroundColor: '#FFFFFF',
-    _textColor: '#000000',
+    _background_color_input: null,
+    _text_color_input: null,
 
     _init: function() {
         this.parent(0.0, "Contrast Ratio", false);
@@ -166,13 +171,13 @@ const ContrastRatioPanel = new Lang.Class({
 
         let background_color_label = new PopupMenu.PopupMenuItem('Background color', { reactive: false });
         this.menu.addMenuItem(background_color_label);
-        let background_color_input = new ColorInput('background', this._backgroundColor, this);
-        this.menu.addMenuItem(background_color_input);
+        this._background_color_input = new ColorInput('background', '#FFFFFF', this);
+        this.menu.addMenuItem(this._background_color_input);
 
         let text_color_label = new PopupMenu.PopupMenuItem('Text color', { reactive: false });
         this.menu.addMenuItem(text_color_label);
-        let text_color_input = new ColorInput('text', this._textColor, this);
-        this.menu.addMenuItem(text_color_input);
+        this._text_color_input = new ColorInput('text', '#000000', this);
+        this.menu.addMenuItem(this._text_color_input);
 
         let contrast_ratio_label = new ContrastRatioLabel(5);
         this.menu.addMenuItem(contrast_ratio_label);
@@ -180,13 +185,16 @@ const ContrastRatioPanel = new Lang.Class({
         let separator = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(separator);
 
-        let swap_colors_button = new PopupMenu.PopupMenuItem('Swap colors');
-        swap_colors_button.connect('activate', Lang.bind(this, this._onSwapColors));
+        let swap_colors_button = new PopupMenu.PopupMenuItem('Swap colors', { activate: false });
+        swap_colors_button.actor.connect('button-release-event', Lang.bind(this, this._onSwapColors));
         this.menu.addMenuItem(swap_colors_button);
     },
 
     _onSwapColors: function() {
-        global.log("Swapping colors");
+        let background_color = this._background_color_input.color;
+        let text_color = this._text_color_input.color;
+        this._background_color_input.update(text_color);
+        this._text_color_input.update(background_color);
     },
 });
 
