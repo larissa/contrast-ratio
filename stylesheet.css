@@ -10,3 +10,9 @@
     width: 35px;
     height: 35px;
 }
+
+.contrast-ratio {
+    background: #FFF;
+    color: #000;
+    text-align: center;
+}
