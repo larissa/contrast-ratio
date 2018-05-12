@@ -51,18 +51,18 @@ const ColorInput = new Lang.Class({
         this._parent = parentMenu;
 
         this._colorPreview = new St.Widget({ reactive: true, style_class: 'color-preview' });
-        this._updatePreviewColor();
         this._colorPreview.connect('button-release-event', Lang.bind(this, this._onClickPreview));
         this.actor.add(this._colorPreview);
 
-        this._colorEntry = new St.Entry({ name: type, text: color, can_focus: true, style_class: 'color-entry' });
+        this._colorEntry = new St.Entry({ name: type, can_focus: true, style_class: 'color-entry' });
         this._colorEntry.clutter_text.connect('activate', Lang.bind(this, this._onActivate));
         this.actor.add(this._colorEntry);
+
+        this.update(this.color);
     },
 
     _onActivate: function() {
-        this._set_color(this._colorEntry.get_text());
-        this._updatePreviewColor();
+        this.update(this._colorEntry.get_text());
     },
 
     _onClickPreview: function() {
@@ -89,8 +89,7 @@ const ColorInput = new Lang.Class({
 
     _getColorCallBack: function(source_object, res) {
         let [color, length] = this._output_reader.read_upto_finish(res);
-        this._set_color(color);
-        this._updatePreviewColor();
+        this.update(color);
         Mainloop.timeout_add(200, Lang.bind(this, function() {
             this._getTopMenu().toggle();
         }));
