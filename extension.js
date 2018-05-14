@@ -44,7 +44,7 @@ const ContrastRatioPanel = new Lang.Class({
         this.parent(0.0, "Contrast Ratio", false);
 
         let icon = new St.Icon({
-            icon_name: 'color-select-symbolic',
+            icon_name: 'contrast-ratio-symbolic',
             style_class: 'system-status-icon'
         });
         this.actor.add_actor(icon);
@@ -86,7 +86,9 @@ const ContrastRatioPanel = new Lang.Class({
     },
 });
 
-function init() {
+function init(extensionMeta) {
+    let theme = imports.gi.Gtk.IconTheme.get_default();
+    theme.append_search_path(extensionMeta.path + "/icons");
 }
 
 function enable() {

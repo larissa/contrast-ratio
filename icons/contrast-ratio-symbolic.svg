@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg1426"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="contrast-ratio-symbolic.svg">
+  <defs
+     id="defs1420" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="31.678384"
+     inkscape:cx="6.465468"
+     inkscape:cy="10.306593"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:pagecheckerboard="false"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata1423">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Contrast Ratio Symbolic</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Contrast Ratio Icon"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-292.76665)">
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.48087871;marker:none;enable-background:accumulate"
+       d="m 0.09968321,295.22862 c 0.1887403,1.1166 1.24691839,1.86877 2.36350979,1.68003 1.1165952,-0.18874 1.8687644,-1.24691 1.6800275,-2.36351 -0.1887402,-1.11659 -1.2469182,-1.86877 -2.3635098,-1.68002 -1.1165951,0.18874 -1.86876429,1.24691 -1.68002749,2.3635 z m 0.62208199,-0.10515 c -0.1306682,-0.77302 0.3900703,-1.50561 1.1630991,-1.63627 0.7730221,-0.13067 1.5056095,0.39007 1.6362777,1.16309 0.1306647,0.77303 -0.3900736,1.50561 -1.1631026,1.63628 -0.7730221,0.13067 -1.5056094,-0.39007 -1.6362742,-1.1631 z"
+       id="path9673"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.52939773;marker:none;enable-background:accumulate"
+       d="m 2.1744016,293.42477 c -0.017142,-5.3e-4 -0.034635,5.3e-4 -0.051877,5.3e-4 v 2.92384 c 0.080914,-7e-5 0.1625153,-0.005 0.2449468,-0.0192 0.8000358,-0.13466 1.3391056,-0.88999 1.203876,-1.68667 -0.1183291,-0.6971 -0.7140192,-1.19513 -1.3969454,-1.21853 z"
+       id="path5143"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
