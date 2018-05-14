@@ -50,6 +50,7 @@ const ColorInput = new Lang.Class({
 
         this._colorEntry = new St.Entry({ name: type, can_focus: true, style_class: 'color-entry' });
         this._colorEntry.clutter_text.connect('activate', Lang.bind(this, this._onActivate));
+        this._colorEntry.clutter_text.connect('key-focus-out', Lang.bind(this, this._onActivate));
         this.actor.add(this._colorEntry);
 
         this.update(this.color);
