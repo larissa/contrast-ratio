@@ -1,6 +1,7 @@
 {
   "name": "Contrast Ratio",
-  "description": "Capture colors and calculate contrast ratio for readability",
-  "uuid": "contrast-ratio@larissareis.org",
-  "shell-version": ["3.26.2"]
+  "description": "Capture colors and calculate contrast ratio for readability based on WCAG 2.0 recommendations",
+  "url": "https://github.com/larissa/contrast-ratio",
+  "uuid": "contrast-ratio@amadteaparty.org",
+  "shell-version": ["3.26", "3.28"]
 }

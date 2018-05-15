@@ -1,3 +1,3 @@
 #!/bin/bash
 
-zip -r constrast-ratio@larissareis.org.zip *
+zip -r constrast-ratio@amadteaparty.org.zip *
