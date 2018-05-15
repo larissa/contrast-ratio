@@ -14,6 +14,8 @@ If you want to capture color from a pixel on your screen, install `grabc`
 
     apt-get install grabc
 
+Now you can grab a hex color code from a pixel on your screen by clicking on the
+color box beside either the background color or text color.
 
 ## Installation from git
 
