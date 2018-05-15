@@ -1,3 +1,3 @@
 #!/bin/bash
 
-zip -r constrast-ratio@amadteaparty.org.zip *
+zip -jr contrast-ratio@amadteaparty.org.zip *
