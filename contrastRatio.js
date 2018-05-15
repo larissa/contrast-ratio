@@ -22,6 +22,10 @@ const St = imports.gi.St;
 
 const PopupMenu = imports.ui.popupMenu;
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Color = Me.imports.color.Color;
+
 
 const ContrastRatio = new Lang.Class({
     Name: 'ContrastRatio',
@@ -42,8 +46,12 @@ const ContrastRatio = new Lang.Class({
     },
 
     _calculateContrastRatio: function(backgroundColor, textColor) {
-        // TODO: actually calculate contrast ratio
-        return 5;
+        let ratio = (Color.luminance(backgroundColor) + 0.05) / (Color.luminance(textColor) + 0.05);
+        if (ratio < 1) {
+            ratio = 1/ratio;
+        }
+        // floor with 2 decimal places
+        return Math.floor(ratio * 100)/100;
     },
 
     _scoreFromRatio: function(ratio) {
