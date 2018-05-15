@@ -3,5 +3,6 @@
   "description": "Capture colors and calculate contrast ratio for readability based on WCAG 2.0 recommendations",
   "url": "https://github.com/larissa/contrast-ratio",
   "uuid": "contrast-ratio@amadteaparty.org",
+  "version": "0.1",
   "shell-version": ["3.26", "3.28"]
 }
