@@ -17,7 +17,11 @@ If you want to capture color from a pixel on your screen, install `grabc`
 Now you can grab a hex color code from a pixel on your screen by clicking on the
 color box beside either the background color or text color.
 
-## Installation from git
+## Install
+
+You can install contrast ratio from gnome extensions: https://extensions.gnome.org/extension/1430/contrast-ratio/
+
+### Install from git
 
     git clone https://github.com/larissa/contrast-ratio.git ~/.local/share/gnome-shell/extensions/contrast-ratio@amadteaparty.org
 
