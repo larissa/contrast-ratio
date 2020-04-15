@@ -36,8 +36,8 @@ const ContrastRatio = new Lang.Class({
     _init: function(backgroundColor, textColor) {
         this.parent({ reactive: false, style_class: 'contrast-ratio' });
 
-        this._ratioLabel = new St.Label()
-        this._scoreLabel = new St.Label()
+        this._ratioLabel = new St.Label({ reactive: false, style_class: 'ratio-label' })
+        this._scoreLabel = new St.Label({ reactive: false, style_class: 'score-label' })
 
         this.actor.add(this._scoreLabel, { expand: true, x_align: St.Align.START });
         this.actor.add(this._ratioLabel, { expand: true, x_align: St.Align.END });

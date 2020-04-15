@@ -15,4 +15,22 @@
     background: #FFF;
     color: #000;
     text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0.375em 1em 0 rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+
+.score-label {
+    font-weight: 800;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.ratio-label {
+    font-size: 15px;
+    font-weight: 500;
+    vertical-align: middle;
 }
