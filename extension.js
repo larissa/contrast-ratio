@@ -20,6 +20,7 @@ Copyright (c) 2018 Larissa Reis <reiss.larissa@gmail.com>
 const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 const St = imports.gi.St;
+const Gio = imports.gi.Gio;
 
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
@@ -44,9 +45,10 @@ const ContrastRatioPanel = new Lang.Class({
         this.parent(0.0, "Contrast Ratio", false);
 
         let icon = new St.Icon({
-            icon_name: 'contrast-ratio-symbolic',
             style_class: 'system-status-icon'
         });
+        icon.gicon = Gio.icon_new_for_string(Me.path + '/icons/contrast-ratio-symbolic.svg');
+
         this.actor.add_actor(icon);
 
         let backgroundColorLabel = new PopupMenu.PopupMenuItem('Background color', { reactive: false });
