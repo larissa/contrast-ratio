@@ -1,5 +1,9 @@
 # contrast-ratio extension for gnome-shell
 
+![21 AAA score](./images/aaa.png)
+![8 AAA score](./images/aaa2.png)
+![fail](./images/fail.png)
+
 Calculate contrast ratio for readability based on WCAG 2.0 recommendations. If
 you have `grabc` installed, you can also capture color from your screen by
 clicking on the color preview.

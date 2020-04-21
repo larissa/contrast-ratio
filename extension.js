@@ -61,12 +61,8 @@ const ContrastRatioPanel = new Lang.Class({
         this._textColorInput = new ColorInput('text', '#000000', this);
         this.menu.addMenuItem(this._textColorInput);
 
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
         this._contrastRatio = new ContrastRatio('#FFFFFF', '#000000');
         this.menu.addMenuItem(this._contrastRatio);
-
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         let swapColorsButton = new PopupMenu.PopupMenuItem('Swap colors', { activate: false });
         swapColorsButton.actor.connect('button-release-event', Lang.bind(this, this._onSwapColors));
